@@ -1,0 +1,116 @@
+﻿
+输入git，看看系统有没有安装Git：
+$ git
+The program 'git' is currently not installed. You can install it by typing:
+
+用Debian或Ubuntu Linux系统，通过一条sudo apt-get install git就可以直接完成Git的安装
+其他Linux版本，可以直接通过源码安装。先从Git官网下载源码，然后解压，依次输入：./config，make，sudo make install这几个命令安装就好了。
+
+在Mac OS X上安装Git
+方法一：安装homebrew，然后通过homebrew安装Git，具体方法请参考homebrew的文档：http://brew.sh/。
+方法二：更简单，也是推荐的方法，就是直接从AppStore安装Xcode，Xcode集成了Git，不过默认没有安装，你需要运行Xcode，选择菜单“Xcode”->“Preferences”，在弹出窗口中找到“Downloads”，选择“Command Line Tools”，点“Install”就可以完成安装了。
+
+在Windows上安装Git
+从Git官网直接下载安装程序（https://git-scm.com/downloads），网速慢的同学请移步国内镜像（https://pan.baidu.com/s/1kU5OCOB#list/path=%2Fpub%2Fgit），然后按默认选项安装即可。
+
+
+安装完成后，还需要最后一步设置，在命令行输入：
+$ git config --global user.name "芦云鹏"
+$ git config --global user.email "luyunpengda@qq.com"
+
+进入目录
+$ cd E:/webfile/
+创建目录jsnote
+$ mkdir jsnote
+进入目录
+$ cd jsnote
+pwd命令用于显示当前目录
+$ pwd
+
+如果你使用Windows系统，为了避免遇到各种莫名其妙的问题，请确保目录名（包括父目录）不包含中文。
+
+通过git init命令把这个目录变成Git可以管理的仓库：
+$ git init
+Initialized empty Git repository in /Users/michael/learngit/.git/
+瞬间Git就把仓库建好了，而且告诉你是一个空的仓库（empty Git repository），细心的读者可以发现当前目录下多了一个.git的目录，这个目录是Git来跟踪管理版本库的，没事千万不要手动修改这个目录里面的文件，不然改乱了，就把Git仓库给破坏了。
+
+如果你没有看到.git目录，那是因为这个目录默认是隐藏的，用ls -ah命令就可以看见。
+
+使用Windows的童鞋要特别注意：
+千万不要使用Windows自带的记事本编辑任何文本文件。原因是Microsoft开发记事本的团队使用了一个非常弱智的行为来保存UTF-8编码的文件，他们自作聪明地在每个文件开头添加了0xefbbbf（十六进制）的字符，你会遇到很多不可思议的问题，比如，网页第一行可能会显示一个“?”，明明正确的程序一编译就报语法错误，等等，都是由记事本的弱智行为带来的。建议你下载Notepad++代替记事本，不但功能强大，而且免费！记得把Notepad++的默认编码设置为UTF-8 without BOM即可
+
+用命令git add告诉Git，把文件添加到仓库：
+$ git add readme.txt
+
+用命令git commit告诉Git，把文件提交到仓库：
+$ git commit -m "wrote a readme file"
+简单解释一下git commit命令，-m后面输入的是本次提交的说明，可以输入任意内容，当然最好是有意义的，这样你就能从历史记录里方便地找到改动记录。
+
+添加文件到Git仓库，分两步：(每次都要add)
+使用命令git add <file>，注意，可反复多次使用，添加多个文件；
+使用命令git commit -m <message>，完成。
+
+git status命令可以让我们时刻掌握仓库当前的状态
+$ git status
+
+git diff顾名思义就是查看difference
+知道了对readme.txt作了什么修改后，再把它提交到仓库就放心多了
+$ git diff readme.txt 
+
+git log命令显示从最近到最远的提交日志
+$ git log
+如果嫌输出信息太多，看得眼花缭乱的，可以试试加上--pretty=oneline参数
+$ git log --pretty=oneline
+提示：你看到的一大串类似1094adb...的是commit id（版本号）
+
+要回退版本，Git必须知道当前版本是哪个版本，在Git中，用HEAD表示当前版本，也就是最新的提交1094adb...（注意我的提交ID和你的肯定不一样），上一个版本就是HEAD^，上上一个版本就是HEAD^^，当然往上100个版本写100个^比较容易数不过来，所以写成HEAD~100
+使用git reset命令把当前版本回退到上一个版本
+$ git reset --hard HEAD^
+
+HEAD指向的版本就是当前版本，因此，Git允许我们在版本的历史之间穿梭，使用命令git reset --hard commit_id。
+穿梭前，用git log可以查看提交历史，以便确定要回退到哪个版本。
+要重返未来，用git reflog查看命令历史，以便确定要回到未来的哪个版本。
+$ git reflog
+
+打印文件内容
+$ cat readme.txt
+
+git checkout -- file可以丢弃工作区的修改
+$ git checkout -- readme.txt
+命令git checkout -- readme.txt意思就是，把readme.txt文件在工作区的修改全部撤销，这里有两种情况：
+一种是readme.txt自修改后还没有被放到暂存区，现在，撤销修改就回到和版本库一模一样的状态；
+一种是readme.txt已经添加到暂存区后，又作了修改，现在，撤销修改就回到添加到暂存区后的状态。
+总之，就是让这个文件回到最近一次git commit或git add时的状态。
+
+用命令git reset HEAD <file>可以把暂存区的修改撤销掉（unstage），重新放回工作区
+
+
+用rm命令删除文件（或直接在文件管理器中删除）
+$ rm test.txt
+
+确实要从版本库中删除该文件，那就用命令git rm删掉，并且git commit
+$ git rm test.txt
+$ git commit -m "remove test.txt"
+
+另一种情况是删错了，因为版本库里还有呢，所以可以很轻松地把误删的文件恢复到最新版本：
+$ git checkout -- test.txt
+
+远程仓库
+注册一个GitHub账号，就可以免费获得Git远程仓库。
+第1步：创建SSH Key。在用户主目录下，看看有没有.ssh目录，如果有，再看看这个目录下有没有id_rsa和id_rsa.pub这两个文件，如果已经有了，可直接跳到下一步。如果没有，打开Shell（Windows下打开Git Bash），创建SSH Key：
+$ ssh-keygen -t rsa -C "youremail@example.com"
+你需要把邮件地址换成你自己的邮件地址，然后一路回车，使用默认值即可，由于这个Key也不是用于军事目的，所以也无需设置密码。
+如果一切顺利的话，可以在用户主目录里找到.ssh目录，里面有id_rsa和id_rsa.pub两个文件，这两个就是SSH Key的秘钥对，id_rsa是私钥，不能泄露出去，id_rsa.pub是公钥，可以放心地告诉任何人。
+第2步：登陆GitHub，打开“Account settings”，“SSH Keys”页面：
+然后，点“Add SSH Key”，填上任意Title，在Key文本框里粘贴id_rsa.pub文件的内容：
+
+
+要关联一个远程库，使用命令
+git remote add origin git@server-name:path/repo-name.git
+关联后，使用命令git push -u origin master第一次推送master分支的所有内容；
+由于远程库是空的，我们第一次推送master分支时，加上了-u参数，Git不但会把本地的master分支内容推送的远程新的master分支，还会把本地的master分支和远程的master分支关联起来，在以后的推送或者拉取时就可以简化命令。
+每次本地提交后，只要有必要，就可以使用命令git push origin master推送最新修改；
+
+ls 查看本地文件
+$ ls
+
