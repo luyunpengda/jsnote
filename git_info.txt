@@ -1,0 +1,61 @@
+﻿git命令：
+确认安装：	$ git
+配置用户：	$ git config --global user.name "芦云鹏"
+		$ git config --global user.email "luyunpengda@qq.com"
+初始仓库	$ git init
+提交版本	$ git add readme.txt readme2.txt
+		$ git commit -m "注释"
+查看仓库状态	$ git status
+查看修改	$ git diff readme.txt 
+查看日志	$ git log
+查看缩减日志	$ git log --pretty=oneline
+查看版本日志	$ git reflog
+查看分支合并情况	$ git log --graph --pretty=oneline --abbrev-commit
+查看分支合并图	$ git log --graph
+回退上一个版本	$ git reset --hard HEAD^
+回退上上版本	$ git reset --hard HEAD^^	-- ^可以累加
+回退指定版本	$ git reset --hard commit_id
+丢弃工作区文件修改	$ git checkout -- readme.txt	-- 1：文件已存暂存区，恢复到暂存区版本、2：文件未存暂存区，恢复到版本库版本
+丢弃暂存区文件修改	$ git reset HEAD readme.txt	-- 恢复到版本库版本
+恢复当前版本文件	$ git reset HEAD readme.txt
+删除文件	$ git rm test.txt
+		$ git commit -m "remove test.txt"
+创建+切换分支	$ git checkout -b <name>
+创建版本分支	$ git branch dev
+切换版本分支	$ git checkout dev
+查看当前分支	$ git branch
+合并某分支到当前分支	git merge <name> -m "注释"
+删除分支	$ git branch -d <name>
+强行删除	$ git branch -D <name>
+存储工作现场	$ git stash
+查看工作现场	$ git stash list
+恢复工作现场	$ git stash apply stash@{0}
+删除工作现场	$ git stash drop
+恢复+删除现场	$ git stash pop
+查看远程库	$ git remote
+查看远程库信息	$ git remote -v
+关联远程库	$ git remote add origin git@server-name:luyunpengda/note.git
+推送到远程	$ git push origin master	-- origin:远程版本名 master:本地版本库名
+克隆远程库	$ git clone git@github.com:michaelliao/gitskills.git
+创建+切换远程分支到本地	$ git checkout -b dev origin/dev
+获取最新远程版本	$ git pull
+设置本地与远程分支关联	$ git branch --set-upstream-to=origin/dev dev
+分支历史整下成直线	$ git rebase
+
+
+
+
+其它命令：
+进入目录	$ cd E:/webfile/  
+创建目录	$ mkdir jsnote
+进入目录	$ cd jsnote
+显示目录	$ pwd
+查看目录	$ ls
+查看隐藏目录	$ ls -ah
+查看文件内容	$ cat readme.txt
+删除文件	$ rm test.txt
+删除本地仓库git文件	find . -name ".git" | xargs rm -Rf
+创建SSH_key	$ ssh-keygen -t rsa -C "luyunpengda@qq.com"
+
+
+
