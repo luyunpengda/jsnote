@@ -8,6 +8,7 @@
 查看仓库状态	$ git status
 查看修改	$ git diff readme.txt 
 查看日志	$ git log
+查看最近一个日志	$ git log -1
 查看缩减日志	$ git log --pretty=oneline
 查看版本日志	$ git reflog
 查看分支合并情况	$ git log --graph --pretty=oneline --abbrev-commit
@@ -27,6 +28,8 @@
 合并某分支到当前分支	git merge <name> -m "注释"
 删除分支	$ git branch -d <name>
 强行删除	$ git branch -D <name>
+强行删除	$ git branch --delete <name>
+分支历史整理成直线	$ git rebase
 存储工作现场	$ git stash
 查看工作现场	$ git stash list
 恢复工作现场	$ git stash apply stash@{0}
@@ -40,9 +43,20 @@
 创建+切换远程分支到本地	$ git checkout -b dev origin/dev
 获取最新远程版本	$ git pull
 设置本地与远程分支关联	$ git branch --set-upstream-to=origin/dev dev
-分支历史整下成直线	$ git rebase
-
-
+查看远程仓库分支	$ git branch -r
+查看本地+远程所有分支	$ git branch -a
+删除本地的远程分支	$ git branch -r -D origin/dev
+删除远程分支	$ git push origin -d dev
+删除远程分支	$ git push origin --delete dev
+创建标签	$ git tag v1.0
+创建带说明标签	$ git tag -a v0.1 -m "标签说明" 1094adb
+创建指定版本标签	$ git tag v0.9 f52c633
+查看所有标签	$ git tag
+查看标签	$ git show v0.9
+删除标签	$ git tag -d v0.1
+删除远程标签	$ git push origin :refs/tags/v0.9
+推送标签到远程	$ git push origin v1.0
+推送全部标签到远程	$ git push origin --tags
 
 
 其它命令：
