@@ -1,0 +1,142 @@
+﻿UNION与UNION ALL的区别是前者会去除重复的条目，后者会仍旧保留。
+两个并集的字段全部相同
+
+select * from(
+	select 
+	id,ordersn,ordertype
+	from ims_heixiu_car_order 
+	where id in(96037,186670)
+)as o1
+union (
+	select 
+	id,ordersn,ordertype
+	from ims_heixiu_car_order  
+	where id in(187013,186670)
+)
+
+96037	1706151447309484	10
+186670	1805010902378858	10
+187013	1805020928547720	10
+
+select * from(
+	select 
+	id,ordersn,ordertype
+	from ims_heixiu_car_order 
+	where id in(96037,186670)
+)as o1
+union all(
+	select 
+	id,ordersn,ordertype
+	from ims_heixiu_car_order  
+	where id in(187013,186670)
+)
+
+96037	1706151447309484	10
+186670	1805010902378858	10
+186670	1805010902378858	10
+187013	1805020928547720	10
+
+join连接可以分为内连接，外连接，以及交叉连接 
+(即是笛卡尔积)
+
+a. 交叉连接CROSS JOIN
+如果不带WHERE条件子句，它将会返回被连接的两个表的笛卡尔积，返回结果的行数等于两个表行数的乘积；
+
+举例
+SELECT * FROM table1 CROSS JOIN table2
+等同于
+SELECT * FROM table1,table2
+
+一般不建议使用该方法，因为如果有WHERE子句的话，往往会先生成两个表行数乘积的行的数据表然后才根据WHERE条件从中选择。 
+因此，如果两个需要求交际的表太大，将会非常非常慢，不建议使用。
+
+
+
+select * from(
+	select 
+	id,ordersn,ordertype
+	from ims_heixiu_car_order 
+	where id in(96037,186670)
+)as o1
+CROSS JOIN(
+	select 
+	id,ordersn,ordertype
+	from ims_heixiu_car_order  
+	where id in(187013,186670)
+)as o2
+
+id,ordersn,ordertype,id1,ordersn1,ordertype1
+96037	1706151447309484	10	186670	1805010902378858	10
+186670	1805010902378858	10	186670	1805010902378858	10
+96037	1706151447309484	10	187013	1805020928547720	10
+186670	1805010902378858	10	187013	1805020928547720	10
+
+
+
+
+内连接INNER JOIN
+join 等价于 inner join
+如果仅仅使用
+SELECT * FROM table1 INNER JOIN table2
+没有指定连接条件的话，和交叉连接的结果一样。
+
+但是通常情况下，使用INNER JOIN需要指定连接条件。
+-- 等值连接(=号应用于连接条件, 不会去除重复的列)
+SELECT * FROM table1 AS a INNER JOIN table2 AS b on a.column=b.column
+-- 不等连接(>,>=,<,<=,!>,!<,<>)
+例如
+SELECT * FROM table1 AS a INNER JOIN table2 AS b on a.column<>b.column
+-- 自然连接(会去除重复的列)
+
+
+select * from(
+	select 
+	id,ordersn,ordertype
+	from ims_heixiu_car_order 
+	where id in(96037,186670)
+)as o1
+join(
+	select 
+	id,ordersn,ordertype
+	from ims_heixiu_car_order  
+	where id in(187013,186670)
+)as o2
+on o1.id=o2.id
+
+id,ordersn,ordertype,id1,ordersn1,ordertype1
+186670	1805010902378858	10	186670	1805010902378858	10
+
+LEFT JOIN
+LEFT JOIN返回左表的全部行和右表满足ON条件的行，如果左表的行在右表中没有匹配，那么这一行右表中对应数据用NULL代替。
+注释：在某些数据库中，LEFT JOIN 称为LEFT OUTER JOIN
+
+select * from(
+	select 
+	id,ordersn,ordertype
+	from ims_heixiu_car_order 
+	where id in(96037,186670)
+)as o1
+left join(
+	select 
+	id,ordersn,ordertype
+	from ims_heixiu_car_order  
+	where id in(187013,186670)
+)as o2
+on o1.id=o2.id
+
+id,ordersn,ordertype,id1,ordersn1,ordertype1
+96037	1706151447309484	10			
+186670	1805010902378858	10	186670	1805010902378858	10
+
+RIGHT JOIN
+RIGHT JOIN返回右表的全部行和左表满足ON条件的行，如果右表的行在左表中没有匹配，那么这一行左表中对应数据用NULL代替。
+注释：在某些数据库中，RIGHT JOIN 称为RIGHT OUTER JOIN
+
+mysql 不支持 full join
+FULL OUTER JOIN
+FULL JOIN 会从左表 和右表 那里返回所有的行。如果其中一个表的数据行在另一个表中没有匹配的行，那么对面的数据用NULL代替
+
+
+
+
+
