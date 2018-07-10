@@ -19,6 +19,14 @@ The program 'git' is currently not installed. You can install it by typing:
 $ git config --global user.name "芦云鹏"
 $ git config --global user.email "luyunpengda@qq.com"
 
+
+
+解决方案： 
+1. 如果账号密码有变动 用这个命令 git config –system –unset credential.helper 重新输入账号密码 应该就能解决了 
+2. 如果用了第一个命令 还不能解决问题那么 用这个命令： 
+git config –global http.emptyAuth true
+
+
 进入目录
 $ cd E:/webfile/
 创建目录jsnote
