@@ -1,0 +1,14 @@
+1、安装homebrew
+	/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+2、安装IntelliJ IDEA
+3、安装Java Idk
+4、使用brew安装Maven:   brew install maven
+
+注意：
+1、项目下的pom.xml文件右击maven/reimport
+2、自己安装mysql:
+	brew install mysql
+	mysql.server start
+	mysql -uroot -p
+	-- 初始密码为空
+3、安装nginx: brew install nginx
