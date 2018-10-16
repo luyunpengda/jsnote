@@ -1,0 +1,38 @@
+Mac结束任务进程
+ps -ef|grep Visual*
+kill -9 进程ID
+
+Node安装：
+git
+node
+npm
+yarn run list
+npm install gulp -g
+npm install --save-dev gulp
+
+npm run build
+npm start
+
+
+运行Vue项目：
+安装nginx
+安装node
+安装npm
+sudo npm install -g vue-cli
+前往项目目录运行：npm run serve
+
+
+公司开发环境搭建：
+基础环境：
+node安装：最新的LTS版本较推荐
+npm安装：js的包管理工具，新版node会默认安装
+npm环境配置：
+配置淘宝国内仓库镜像：npm config set registry https://registry.npm.taobao.org
+配置成功测试：npm config get registry
+vue开发环境搭建：
+vue-cli工具安装：npm install - g @vue/cli
+拉取代码：
+svn/git 拉取项目代码
+本地运行：
+安装项目环境：npm install（基于package.json文件，生成node_modules文件夹包含项目依赖的js文件）
+运行：npm run command（基于package.json配置的scripts选项命令）【嗨修：npm run serve】
