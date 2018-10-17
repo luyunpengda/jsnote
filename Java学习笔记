@@ -1,0 +1,210 @@
+//包名，命名空间
+package com.luda.learn.springboot.domain;
+
+//引入类：JPA注解持久化类
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
+//标明该类是一个实体类
+@Entity
+//指定数据库对应的表
+@Table(name = "Company")
+public class Company {
+    //构造函数（初始化对象的属性值，可重载，没有返回值类型）
+    public Company(){
+        //调用其它构造函数，比须放在第一行
+        this((int)(System.currentTimeMillis()/1000));
+    }
+    public Company(int create_time){
+        this.create_time=create_time;
+    }
+    @Id
+    @GeneratedValue
+    private long id;
+    private String name;
+    private String code;
+    private byte status;
+    private int update_time;
+    private int create_time;
+
+    public long getId(){
+        return this.id;
+    }
+
+    public String getName() {
+        return name;
+    }
+    public String getCode(){
+        return code;
+    }
+    public byte getStaus(){
+        return status;
+    }
+    public int getUpdateTime(){
+        return update_time;
+    }
+    public int getCreateTime(){
+        return create_time;
+    }
+    public void setName(String name){
+        this.name=name;
+    }
+    public void setCode(String code){
+        this.code=code;
+    }
+    public void setStatus(byte status){
+        this.status=status;
+    }
+    public void setUpdateTime(){
+        long currentTime=System.currentTimeMillis();
+        this.update_time=(int)(currentTime/1000);
+    }
+}
+/*
+学习笔记：
+
+this的使用:
+    1、this调用成员变量和成员函数
+        a.this是对象，this.成员变量；this.函数（哪个对象调用的，this就代表该对象）。
+        b.函数的参数与成员变量重名时，赋值语句使用 this.name = name;
+    2、使用this调用构造函数
+        a. this调用本类中其他的构造函数；
+        b. this(name,age); 根据this所带的参数觉得调用哪个构造函数。但必须是构造函数中的第一个语句。
+
+super的使用:
+    调用子类的构造函数来生成子类对象的时候，一定要调用父类的构造函数。
+        super(); 调用父类构造函数
+        super.成员函数； 调用父类成员函数或变量
+
+不支持函数参数默认值：
+    因为“默认参数”和“方法重载”同时支持的话有二义性的问题。
+    使用“方法重载”可以间接实现”默认参数“的效果，而且避免了代码过于hack。
+
+int与Integer的区别：
+    1、Integer是int的包装类，int则是java的一种基本数据类型
+    2、Integer变量必须实例化后才能使用，而int变量不需要
+    3、Integer实际是对象的引用，当new一个Integer时，实际上是生成一个指针指向此对象；而int则是直接存储数据值
+    4、Integer的默认值是null，int的默认值是0
+延伸：
+    关于Integer和int的比较：
+        1、由于Integer变量实际上是对一个Integer对象的引用，所以两个通过new生成的Integer变量永远是不相等的（因为new生成的是两个对象，其内存地址不同）
+            Integer i = new Integer(100);
+            Integer j = new Integer(100);
+            System.out.print(i == j); //false
+        2、Integer变量和int变量比较时，只要两个变量的值是向等的，则结果为true（因为包装类Integer和基本数据类型int比较时，java会自动拆包装为int，然后进行比较，实际上就变为两个int变量的比较）
+            Integer i = new Integer(100);
+            int j = 100；
+            System.out.print(i == j); //true
+        3、非new生成的Integer变量和new Integer()生成的变量比较时，结果为false。（因为非new生成的Integer变量指向的是java常量池中的对象，而new Integer()生成的变量指向堆中新建的对象，两者在内存中的地址不同）
+            Integer i = new Integer(100);
+            Integer j = 100;
+            System.out.print(i == j); //false
+        4、对于两个非new生成的Integer对象，进行比较时，如果两个变量的值在区间-128到127之间，则比较结果为true，如果两个变量的值不在此区间，则比较结果为false
+            Integer i = 100;
+            Integer j = 100;
+            System.out.print(i == j); //true
+            Integer m = 128;
+            Integer n = 128;
+            System.out.print(m == n); //false
+        对于第4条的原因：
+        java在编译Integer i = 100 ;时，会翻译成为Integer i = Integer.valueOf(100)；
+        java API中对Integer类型的valueOf的定义如下：
+        public static Integer valueOf(int i){
+            assert IntegerCache.high >= 127;
+            if (i >= IntegerCache.low && i <= IntegerCache.high){
+                return IntegerCache.cache[i + (-IntegerCache.low)];
+            }
+            return new Integer(i);
+        }
+        java对于-128到127之间的数，会进行缓存，Integer i = 127时，会将127进行缓存，下次再写Integer j = 127时，就会直接从缓存中取，就不会new了
+    关于两个String之间的比较：
+        String使用equals和==比较的区别；
+        "=="操作符的作用：
+            1、用于基本数据类型的比较
+            2、判断引用是否指向堆内存的同一块地址。
+        equals所在位置：
+            在Object类当中，而Object是所有类的父类，包含在jdk里面，但并不适合绝大多数场景，通常需要重写
+            public boolean equals(Object obj) {
+                return (this == obj);
+            }
+        equals的作用：
+            用于判断两个变量是否是对同一个对象的引用，即堆中的内容是否相同，返回值为布尔类型
+        String类型比较不同对象内容是否相同，应该用equals，因为==用于比较引用类型和比较基本数据类型时具有不同的功能。
+            String作为一个对象来使用
+                一：对象不同，内容相同，"=="返回false，equals返回true
+                    String s1 = new String("java");
+                    String s2 = new String("java");
+                    System.out.println(s1==s2);            //false
+                    System.out.println(s1.equals(s2));    //true
+                二：同一对象，"=="和equals结果相同
+                    String s1 = new String("java");
+                    String s2 = s1;
+                    System.out.println(s1==s2);            //true
+                    System.out.println(s1.equals(s2));    //true
+            String作为一个基本类型来使用
+                如果值不相同，对象就不相同，所以"==" 和equals结果一样
+                    String s1 = "java";
+                    String s2 = "java";
+                    System.out.println(s1==s2);            //true
+                    System.out.println(s1.equals(s2));    //true
+            如果String缓冲池内不存在与其指定值相同的String对象，那么此时虚拟机将为此创建新的String对象，并存放在String缓冲池内。
+            如果String缓冲池内存在与其指定值相同的String对象，那么此时虚拟机将不为此创建新的String对象，而直接返回已存在的String对象的引用。
+
+关键字：
+    static:
+        static方法就是没有this的方法。在static方法内部不能调用非静态方法，反过来是可以的。而且可以在没有创建任何对象的前提下，仅仅通过类本身来调用static方法。这实际上正是static方法的主要用途。
+        1、static方法
+            构造器是否是static方法？
+            参考：https://blog.csdn.net/qq_17864929/article/details/48006835
+        2、static变量
+            static变量也称作静态变量，静态变量和非静态变量的区别是：静态变量被所有的对象所共享，在内存中只有一个副本，它当且仅当在类初次加载时会被初始化。而非静态变量是对象所拥有的，在创建对象的时候被初始化，存在多个副本，各个对象拥有的副本互不影响。
+        3、static代码块
+            static关键字还有一个比较关键的作用就是 用来形成静态代码块以优化程序性能。static块可以置于类中的任何地方，类中可以有多个static块。在类初次被加载的时候，会按照static块的顺序来执行每个static块，并且只会执行一次。
+            为什么说static块可以用来优化程序性能，是因为它的特性:只会在类加载的时候执行一次。
+        误区：
+            1.static关键字会改变类中成员的访问权限吗？
+            2.能通过this访问静态成员变量吗？
+                静态成员变量虽然独立于对象，但是不代表不可以通过对象去访问，所有的静态方法和静态变量都可以通过对象访问（只要访问权限足够）。
+            3.static能作用于局部变量么？
+                static是不允许用来修饰局部变量。
+    final:这是不可变的
+        1.修饰数据
+            用final关键字修饰的变量，只能进行一次赋值操作，并且在生存期内不可以改变它的值。更重要的是，final会告诉编译器，这个数据是不会修改的，那么编译器就可能会在编译时期就对该数据进行替换甚至执行计算，这样可以对我们的程序起到一点优化。不过在针对基本类型和引用类型时，final关键字的效果存在细微差别。
+            参考：https://www.cnblogs.com/dotgua/p/6357951.html
+        2.修饰方法参数
+            在我们编写方法时，可以在参数前面添加final关键字，它表示在整个方法中，我们不会（实际上是不能）改变参数的值
+        3.修饰方法
+            即用final关键字修饰方法，表示该方法无法被重写。
+        4.修饰类
+            用final修饰的类是无法被继承的。
+
+获取时间戳：
+    方法一：
+    System.currentTimeMillis();
+    方法二：（获取速度最慢）
+    Calendar.getInstance().getTimeInMillis();
+    方法三：
+    new Date().getTime();
+获取当前时间：
+    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
+    String date = df.format(new Date());// new Date()为获取当前系统时间，也可使用当前时间戳
+
+long（Long）与int（Integer）之间的转换：
+    一、将long型转化为int型，这里的long型是基础类型：
+        long   a = 10;
+        int b = (int)a;
+    二、将Long型转换为int型，这里的Long型是包装类型：
+        Long a = 10;
+        int b=a.intValue();
+    三、将int型转化为long型，这里的int型是基础类型：
+        int a = 10;
+        long b = (int)a;
+    四、将Integer型转化为long型，这里的Integer型是包装类型：
+        int a = 10;
+        Long b = a.longValue();
+
+JPA(Java Persistence API)是Sun官方提出的Java持久化规范。它为Java开发人员提供了一种对象/关系映射工具来管理Java应用中的关系数据。而Hibernate是它的一种实现。除了Hibernate，还有EclipseLink(曾经的toplink)，OpenJPA等可供选择，所以使用Jpa的一个好处是，可以更换实现而不必改动太多代码。
+
+*/
